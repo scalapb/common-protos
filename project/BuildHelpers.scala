@@ -12,9 +12,15 @@ object NoProcessLogger extends ProcessLogger {
 }
 
 object BuildHelpers {
+  val Scala211 = "2.11.12"
+  val Scala212 = "2.12.10"
+  val Scala213 = "2.13.1"
+
   val grpcVersion = "1.28.0"
 
-  val scalapbVersion = "0.10"
+  val scalapbVersion = scalapb.compiler.Version.scalapbVersion
+
+  val scalapbMajorMinor = scalapbVersion.split('.').take(2).mkString(".")
 
   val basePackageName = settingKey[String]("Base name for module")
 
@@ -51,18 +57,23 @@ object BuildHelpers {
       .Project(module.name, new File(module.name))
       .settings(
         basePackageName := module.name,
-        name := basePackageName.value + s"-scalapb_${scalapbVersion}",
+        name := basePackageName.value + s"-scalapb_${scalapbMajorMinor}",
+        moduleName := name.value,
         version := {
           if (isSnapshot) s"${module.revision}-SNAPSHOT"
           else s"${module.revision}-${buildNumber.value}"
         },
+        crossScalaVersions := (scalapbMajorMinor match {
+          case "0.9"  => List(Scala213, Scala212, Scala211)
+          case "0.10" => List(Scala213, Scala212)
+        }),
         versionTag := s"${basePackageName.value}/${module.revision}-${buildNumber.value}",
         libraryDependencies ++= (if (grpc)
                                    Seq(
-                                     "com.thesamet.scalapb" %% "scalapb-runtime-grpc" % scalapb.compiler.Version.scalapbVersion
+                                     "com.thesamet.scalapb" %% "scalapb-runtime-grpc" % scalapbVersion
                                    )
                                  else Nil),
-        libraryDependencies += "com.thesamet.scalapb" %% "scalapb-runtime" % scalapb.compiler.Version.scalapbVersion % "protobuf",
+        libraryDependencies += "com.thesamet.scalapb" %% "scalapb-runtime" % scalapbVersion % "protobuf",
         libraryDependencies += module,
         libraryDependencies += module % "protobuf-src" intransitive (),
         PB.targets in Compile := Seq(

@@ -16,6 +16,11 @@ jobs:
       script: sbt compile
     - name: formatting
       script: sbt scalafmtCheck scalafmtSbtCheck
-    # run ci-release only if previous stages passed
     - stage: release
-      script: sbt ci-release
+      env:
+      - SCALAPB_VERSION: 0.9
+      script: ./release.sh
+    - stage: release
+      env:
+      - SCALAPB_VERSION: 0.10
+      script: ./release.sh

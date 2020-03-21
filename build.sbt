@@ -2,17 +2,15 @@ import BuildHelpers._
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
-ThisBuild / crossScalaVersions := Seq("2.12.10", "2.13.1")
-
 javacOptions ++= List("-target", "8", "-source", "8")
 
-ThisBuild / organization := "com.thesamet.scalapb"
+ThisBuild / organization := "com.thesamet.scalapb.common-protos"
 
 sonatypeProfileName := "com.thesamet"
 
 publishTo := sonatypePublishToBundle.value
 
-publish / skip := true
+skip in publish := true
 
 lazy val `proto-google-common-protos` = protoProject(
   "com.google.api.grpc" % "proto-google-common-protos" % "1.17.0",

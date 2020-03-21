@@ -2,6 +2,7 @@ import sbt._
 import Keys._
 import sbtprotoc.ProtocPlugin.autoImport.PB
 import scala.sys.process.{ProcessLogger, Process}
+import xerial.sbt.Sonatype.autoImport.sonatypeBundleDirectory
 
 object NoProcessLogger extends ProcessLogger {
   def info(s: => String) = ()
@@ -80,6 +81,9 @@ object BuildHelpers {
           scalapb
             .gen(javaConversions = true) -> (sourceManaged in Compile).value / "protobuf"
         ),
-        createTags := createTagsImpl.value
+        createTags := createTagsImpl.value,
+        publish / skip := (sys.env
+          .getOrElse("PUBLISH_ONLY", module.name) != module.name),
+        sonatypeBundleDirectory := (ThisBuild / baseDirectory).value / "target" / "sonatype-staging"
       )
 }

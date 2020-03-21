@@ -4,11 +4,9 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 
 javacOptions ++= List("-target", "8", "-source", "8")
 
-ThisBuild / organization := "com.thesamet.scalapb.common-protos"
-
 sonatypeProfileName := "com.thesamet"
 
-publishTo := sonatypePublishToBundle.value
+sonatypeBundleDirectory := (ThisBuild / baseDirectory).value / "target" / "sonatype-staging"
 
 skip in publish := true
 

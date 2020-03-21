@@ -5,7 +5,5 @@ if [ -z "${TRAVIS_TAG}" ]; then
     sbt ci-release
 else 
     echo "Travis tag is set to ${TRAVIS_TAG}. Making a release";
-    for tag in $(git tag --points-at HEAD);
-      do CI_RELEASE=+${tag%%/*}/publishSigned sbt ci-release;
-    done
+    PUBLISH_ONLY=${TRAVIS_TAG%%/*} RELEASE=1 sbt ci-release;
 fi

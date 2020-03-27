@@ -15,6 +15,7 @@ For example, for ScalaPB 0.9.x:
 
 ```
 libraryDependencies += "com.thesamet.scalapb.common-protos" %% "proto-google-common-protos-scalapb_0.9" % "1.17.0-0"
+libraryDependencies += "com.thesamet.scalapb.common-protos" %% "proto-google-common-protos-scalapb_0.9" % "1.17.0-0" % "protobuf"
 ```
 
 See [list of all libraries and versions](https://repo1.maven.org/maven2/com/thesamet/scalapb/common-protos/).

@@ -1,4 +1,4 @@
-addSbtPlugin("com.thesamet" % "sbt-protoc" % "0.99.29")
+addSbtPlugin("com.thesamet" % "sbt-protoc" % "0.99.31")
 
 addSbtPlugin("com.geirsson" % "sbt-ci-release" % "1.5.2")
 

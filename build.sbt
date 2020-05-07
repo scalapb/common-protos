@@ -18,7 +18,7 @@ lazy val `proto-google-common-protos` = protoProject(
 )
 
 lazy val `proto-google-cloud-pubsub-v1` = protoProject(
-  "com.google.api.grpc" % "proto-google-cloud-pubsub-v1" % "1.85.1",
+  "com.google.api.grpc" % "proto-google-cloud-pubsub-v1" % "1.87.1",
   grpc = true
 ).dependsOn(`proto-google-common-protos`)
   .settings(

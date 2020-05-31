@@ -11,7 +11,7 @@ sonatypeBundleDirectory := (ThisBuild / baseDirectory).value / "target" / "sonat
 skip in publish := true
 
 lazy val `proto-google-common-protos` = protoProject(
-  "com.google.api.grpc" % "proto-google-common-protos" % "1.17.0",
+  "com.google.api.grpc" % "proto-google-common-protos" % "1.18.0",
   grpc = true
 ).settings(
   buildNumber := 0

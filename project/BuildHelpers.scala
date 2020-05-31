@@ -79,7 +79,9 @@ object BuildHelpers {
         libraryDependencies += module % "protobuf-src" intransitive (),
         PB.targets in Compile := Seq(
           scalapb
-            .gen(javaConversions = true) -> (sourceManaged in Compile).value / "protobuf"
+            .gen(javaConversions =
+              true
+            ) -> (sourceManaged in Compile).value / "protobuf"
         ),
         createTags := createTagsImpl.value,
         publish / skip := (sys.env

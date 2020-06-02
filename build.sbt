@@ -24,3 +24,11 @@ lazy val `proto-google-cloud-pubsub-v1` = protoProject(
   .settings(
     buildNumber := 0
   )
+
+lazy val `pgv-proto` = protoProject(
+  "io.envoyproxy.protoc-gen-validate" % "pgv-java-stub" % "0.3.0",
+  grpc = false
+).settings(
+  basePackageName := "pgv-proto",
+  buildNumber := 0
+)

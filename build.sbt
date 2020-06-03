@@ -1,5 +1,3 @@
-import BuildHelpers._
-
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 javacOptions ++= List("-target", "8", "-source", "8")
@@ -10,25 +8,28 @@ sonatypeBundleDirectory := (ThisBuild / baseDirectory).value / "target" / "sonat
 
 skip in publish := true
 
-lazy val `proto-google-common-protos` = protoProject(
-  "com.google.api.grpc" % "proto-google-common-protos" % "1.18.0",
-  grpc = true
-).settings(
-  buildNumber := 0
-)
-
-lazy val `proto-google-cloud-pubsub-v1` = protoProject(
-  "com.google.api.grpc" % "proto-google-cloud-pubsub-v1" % "1.88.0",
-  grpc = true
-).dependsOn(`proto-google-common-protos`)
-  .settings(
-    buildNumber := 0
+def commonProtos =
+  ProtosProject(
+    "com.google.api.grpc" % "proto-google-common-protos" % "1.18.0",
+    grpc = true,
+    buildNumber = 0
   )
+lazy val commonProtos09 = commonProtos.scalapb09
+lazy val commonProtos10 = commonProtos.scalapb10
 
-lazy val `pgv-proto` = protoProject(
+val cloudPubSub = ProtosProject(
+  "com.google.api.grpc" % "proto-google-cloud-pubsub-v1" % "1.88.0",
+  grpc = true,
+  buildNumber = 0
+).dependsOn(commonProtos)
+lazy val cloudPubSub09 = cloudPubSub.scalapb09
+lazy val cloudPubSub10 = cloudPubSub.scalapb10
+
+val pgvProto = ProtosProject(
   "io.envoyproxy.protoc-gen-validate" % "pgv-java-stub" % "0.3.0",
-  grpc = false
-).settings(
-  basePackageName := "pgv-proto",
-  buildNumber := 0
+  grpc = false,
+  packageName = Some("pgv-proto"),
+  buildNumber = 0
 )
+lazy val pgvProto09 = cloudPubSub.scalapb09
+lazy val pgvProto10 = cloudPubSub.scalapb10

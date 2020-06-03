@@ -12,15 +12,7 @@ stages:
 
 jobs:
   include:
-    - name: compile
-      script: sbt compile
-    - name: formatting
-      script: sbt scalafmtCheck scalafmtSbtCheck
+    - name: compile and format
+      script: sbt compile scalafmtCheck scalafmtSbtCheck
     - stage: release
-      env:
-      - SCALAPB_VERSION: 0.9
-      script: ./release.sh
-    - stage: release
-      env:
-      - SCALAPB_VERSION: 0.10
       script: ./release.sh

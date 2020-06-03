@@ -31,5 +31,5 @@ val pgvProto = ProtosProject(
   packageName = Some("pgv-proto"),
   buildNumber = 0
 )
-lazy val pgvProto09 = cloudPubSub.scalapb09
-lazy val pgvProto10 = cloudPubSub.scalapb10
+lazy val pgvProto09 = pgvProto.scalapb09
+lazy val pgvProto10 = pgvProto.scalapb10

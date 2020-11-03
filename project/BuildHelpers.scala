@@ -39,6 +39,7 @@ final case class ProtosProject(
         crossScalaVersions := (scalapbMajorMinor match {
           case "0.9"  => List(Scala213, Scala212, Scala211)
           case "0.10" => List(Scala213, Scala212)
+          case "0.11" => List(Scala3, Scala213, Scala212)
         }),
         versionTag := s"${basePackageName}/${module.revision}-${buildNumber}",
         libraryDependencies ++= (if (grpc)
@@ -70,13 +71,18 @@ final case class ProtosProject(
   }
 
   def scalapb09: Project =
-    protoProject("0.10.8").dependsOn(
+    protoProject("0.9.8").dependsOn(
       dependencies.map(d => ClasspathDependency(d.scalapb09, None)): _*
     )
 
   val scalapb10: Project =
     protoProject("0.10.8").dependsOn(
       dependencies.map(d => ClasspathDependency(d.scalapb10, None)): _*
+    )
+
+  val scalapb11: Project =
+    protoProject("0.11.0-M3").dependsOn(
+      dependencies.map(d => ClasspathDependency(d.scalapb11, None)): _*
     )
 
   def dependsOn(other: ProtosProject) =
@@ -86,9 +92,8 @@ final case class ProtosProject(
 object ProtosProject {
   val Scala211 = "2.11.12"
   val Scala212 = "2.12.10"
-  val Scala213 = "2.13.1"
-
-  val grpcVersion = "1.28.0"
+  val Scala213 = "2.13.2"
+  val Scala3 = "0.27.0-RC1"
 
   val versionTag = settingKey[String]("Version tag to use in git")
 

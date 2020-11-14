@@ -66,7 +66,8 @@ final case class ProtosProject(
         createTags := createTagsImpl.value,
         publish / skip := (sys.env
           .getOrElse("PUBLISH_ONLY", basePackageName) != basePackageName),
-        sonatypeBundleDirectory := (ThisBuild / baseDirectory).value / "target" / "sonatype-staging"
+        sonatypeBundleDirectory := (ThisBuild / baseDirectory).value / "target" / "sonatype-staging",
+        publishArtifact in (Compile, packageDoc) := scalaVersion.value != Scala3
       )
   }
 
@@ -76,7 +77,7 @@ final case class ProtosProject(
     )
 
   val scalapb10: Project =
-    protoProject("0.10.8").dependsOn(
+    protoProject("0.10.9").dependsOn(
       dependencies.map(d => ClasspathDependency(d.scalapb10, None)): _*
     )
 

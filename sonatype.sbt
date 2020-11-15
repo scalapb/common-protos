@@ -1,4 +1,4 @@
-sonatypeProfileName := "com.thesame.scalapb"
+sonatypeProfileName := "com.thesamet"
 
 // Where is the source code hosted: GitHub or GitLab?
 import xerial.sbt.Sonatype._

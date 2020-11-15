@@ -72,7 +72,7 @@ final case class ProtosProject(
   }
 
   def scalapb09: Project =
-    protoProject("0.9.8").dependsOn(
+    protoProject("0.10.9").dependsOn(
       dependencies.map(d => ClasspathDependency(d.scalapb09, None)): _*
     )
 

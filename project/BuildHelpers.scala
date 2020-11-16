@@ -82,7 +82,7 @@ final case class ProtosProject(
     )
 
   val scalapb11: Project =
-    protoProject("0.11.0-M3").dependsOn(
+    protoProject("0.11.0-M4").dependsOn(
       dependencies.map(d => ClasspathDependency(d.scalapb11, None)): _*
     )
 

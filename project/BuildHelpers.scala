@@ -82,7 +82,7 @@ final case class ProtosProject(
     )
 
   val scalapb11: Project =
-    protoProject("0.11.0-M3").dependsOn(
+    protoProject("0.11.0-M4").dependsOn(
       dependencies.map(d => ClasspathDependency(d.scalapb11, None)): _*
     )
 
@@ -92,9 +92,9 @@ final case class ProtosProject(
 
 object ProtosProject {
   val Scala211 = "2.11.12"
-  val Scala212 = "2.12.10"
-  val Scala213 = "2.13.2"
-  val Scala3 = "0.27.0-RC1"
+  val Scala212 = "2.12.13"
+  val Scala213 = "2.13.4"
+  val Scala3 = "3.0.0-M2"
 
   val versionTag = settingKey[String]("Version tag to use in git")
 

@@ -12,6 +12,7 @@ def commonProtos =
   ProtosProject(
     "com.google.api.grpc" % "proto-google-common-protos" % "1.18.1",
     grpc = true,
+    protoPackage = "google",
     buildNumber = 0
   )
 lazy val commonProtos09 = commonProtos.scalapb09
@@ -21,6 +22,7 @@ lazy val commonProtos11 = commonProtos.scalapb11
 val cloudPubSub = ProtosProject(
   "com.google.api.grpc" % "proto-google-cloud-pubsub-v1" % "1.92.3",
   grpc = true,
+  protoPackage = "google",
   buildNumber = 0
 ).dependsOn(commonProtos)
 lazy val cloudPubSub09 = cloudPubSub.scalapb09
@@ -30,6 +32,7 @@ lazy val cloudPubSub11 = cloudPubSub.scalapb11
 val pgvProto = ProtosProject(
   "io.envoyproxy.protoc-gen-validate" % "pgv-java-stub" % "0.4.1",
   grpc = false,
+  protoPackage = "validate",
   packageName = Some("pgv-proto"),
   buildNumber = 0
 )

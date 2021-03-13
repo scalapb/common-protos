@@ -13,7 +13,7 @@ def commonProtos =
     "com.google.api.grpc" % "proto-google-common-protos" % "1.18.1",
     grpc = true,
     protoPackage = "google",
-    buildNumber = 1
+    buildNumber = 2
   )
 lazy val commonProtos09 = commonProtos.scalapb09
 lazy val commonProtos10 = commonProtos.scalapb10
@@ -34,7 +34,7 @@ val pgvProto = ProtosProject(
   grpc = false,
   protoPackage = "validate",
   packageName = Some("pgv-proto"),
-  buildNumber = 1
+  buildNumber = 2
 )
 lazy val pgvProto09 = pgvProto.scalapb09
 lazy val pgvProto10 = pgvProto.scalapb10

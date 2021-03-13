@@ -8,6 +8,7 @@ sonatypeBundleDirectory := (ThisBuild / baseDirectory).value / "target" / "sonat
 
 skip in publish := true
 
+/* Skipping common protos due to https://github.com/googleapis/api-common-protos/issues/83
 def commonProtos =
   ProtosProject(
     "com.google.api.grpc" % "proto-google-common-protos" % "1.18.1",
@@ -28,6 +29,7 @@ val cloudPubSub = ProtosProject(
 lazy val cloudPubSub09 = cloudPubSub.scalapb09
 lazy val cloudPubSub10 = cloudPubSub.scalapb10
 lazy val cloudPubSub11 = cloudPubSub.scalapb11
+ */
 
 val pgvProto = ProtosProject(
   "io.envoyproxy.protoc-gen-validate" % "pgv-java-stub" % "0.4.1",

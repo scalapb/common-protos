@@ -42,7 +42,7 @@ final case class ProtosProject(
         crossScalaVersions := (scalapbMajorMinor match {
           case "0.9"  => List(Scala213, Scala212, Scala211)
           case "0.10" => List(Scala213, Scala212)
-          case "0.11" => List(Scala213, Scala212)
+          case "0.11" => List(Scala3, Scala213, Scala212)
         }),
         versionTag := s"${basePackageName}/${module.revision}-${buildNumber}",
         libraryDependencies ++= (if (grpc)

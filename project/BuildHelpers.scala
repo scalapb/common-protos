@@ -70,7 +70,6 @@ final case class ProtosProject(
         publish / skip := (sys.env
           .getOrElse("PUBLISH_ONLY", basePackageName) != basePackageName),
         sonatypeBundleDirectory := (ThisBuild / baseDirectory).value / "target" / "sonatype-staging",
-        publishArtifact in (Compile, packageDoc) := scalaVersion.value != Scala3,
         Compile / resourceGenerators += Def.task {
 
           val packageOptionsFile =

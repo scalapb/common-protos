@@ -6,7 +6,7 @@ sonatypeProfileName := "com.thesamet"
 
 sonatypeBundleDirectory := (ThisBuild / baseDirectory).value / "target" / "sonatype-staging"
 
-skip in publish := true
+publish / skip := true
 
 /* Skipping common protos due to https://github.com/googleapis/api-common-protos/issues/83
 def commonProtos =

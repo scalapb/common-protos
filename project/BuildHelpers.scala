@@ -60,11 +60,11 @@ final case class ProtosProject(
           "sh",
           "unix"
         )),
-        PB.targets in Compile := Seq(
+        Compile / PB.targets := Seq(
           (
             PB.gens.plugin("scala"),
             Seq("java_conversions")
-          ) -> (sourceManaged in Compile).value / "protobuf"
+          ) -> (Compile / sourceManaged).value / "protobuf"
         ),
         createTags := createTagsImpl.value,
         publish / skip := (sys.env

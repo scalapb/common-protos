@@ -32,7 +32,7 @@ lazy val cloudPubSub11 = cloudPubSub.scalapb11
  */
 
 val pgvProto = ProtosProject(
-  "io.envoyproxy.protoc-gen-validate" % "pgv-java-stub" % "0.4.1",
+  "io.envoyproxy.protoc-gen-validate" % "pgv-java-stub" % "0.6.1",
   grpc = false,
   protoPackage = "validate",
   packageName = Some("pgv-proto"),

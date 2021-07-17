@@ -36,7 +36,7 @@ val pgvProto = ProtosProject(
   grpc = false,
   protoPackage = "validate",
   packageName = Some("pgv-proto"),
-  buildNumber = 6
+  buildNumber = 0
 )
 lazy val pgvProto09 = pgvProto.scalapb09
 lazy val pgvProto10 = pgvProto.scalapb10

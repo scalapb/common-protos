@@ -126,7 +126,7 @@ final case class ProtosProject(
 object ProtosProject {
   val Scala211 = "2.11.12"
   val Scala212 = "2.12.14"
-  val Scala213 = "2.13.5"
+  val Scala213 = "2.13.6"
   val Scala3 = "3.0.1"
 
   val versionTag = settingKey[String]("Version tag to use in git")

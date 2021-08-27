@@ -100,6 +100,16 @@ final case class ProtosProject(
         }.taskValue,
         Compile / packageBin / packageOptions += {
           Package.ManifestAttributes("ScalaPB-Options-Proto" -> optionsFile)
+        },
+        // Workaround for https://github.com/googleapis/java-common-protos/issues/210
+        Compile / PB.runProtoc := {
+          val runner = (Compile / PB.runProtoc).value
+          protocbridge.ProtocRunner.fromFunction { (args, extraEnv) =>
+            runner.run(
+              args.filterNot(_.contains("google/cloud/common_resources.proto")),
+              extraEnv
+            )
+          }
         }
       )
   }
@@ -115,7 +125,7 @@ final case class ProtosProject(
     )
 
   val scalapb11: Project =
-    protoProject("0.11.3").dependsOn(
+    protoProject("0.11.5").dependsOn(
       dependencies.map(d => ClasspathDependency(d.scalapb11, None)): _*
     )
 

@@ -10,7 +10,7 @@ publish / skip := true
 
 def commonProtos =
   ProtosProject(
-    "com.google.api.grpc" % "proto-google-common-protos" % "2.4.1",
+    "com.google.api.grpc" % "proto-google-common-protos" % "2.5.0",
     grpc = true,
     protoPackage = "google",
     buildNumber = 0
@@ -23,7 +23,7 @@ val cloudPubSub = ProtosProject(
   "com.google.api.grpc" % "proto-google-cloud-pubsub-v1" % "1.96.2",
   grpc = true,
   protoPackage = "google",
-  buildNumber = 0
+  buildNumber = 1
 ).dependsOn(commonProtos)
 lazy val cloudPubSub09 = cloudPubSub.scalapb09
 lazy val cloudPubSub10 = cloudPubSub.scalapb10

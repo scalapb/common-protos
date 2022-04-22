@@ -93,6 +93,9 @@ final case class ProtosProject(
                 |  // so it is not yet included here for backwards-compatiblity.
                 |  // java_conversions: true
                 |  preserve_unknown_fields: true
+                |  [scalapb.validate.file] {
+                |     skip: true
+                |  }
                 |};
             """.stripMargin
           )

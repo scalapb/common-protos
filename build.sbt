@@ -20,7 +20,7 @@ lazy val commonProtos10 = commonProtos.scalapb10
 lazy val commonProtos11 = commonProtos.scalapb11
 
 val cloudPubSub = ProtosProject(
-  "com.google.api.grpc" % "proto-google-cloud-pubsub-v1" % "1.102.20",
+  "com.google.api.grpc" % "proto-google-cloud-pubsub-v1" % "1.102.24",
   grpc = true,
   protoPackage = "google",
   buildNumber = 0

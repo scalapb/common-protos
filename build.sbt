@@ -29,6 +29,16 @@ lazy val cloudPubSub09 = cloudPubSub.scalapb09
 lazy val cloudPubSub10 = cloudPubSub.scalapb10
 lazy val cloudPubSub11 = cloudPubSub.scalapb11
 
+val cloudDataproc = ProtosProject(
+  "com.google.api.grpc" % "proto-google-cloud-dataproc-v1" % "3.0.4",
+  grpc = true,
+  protoPackage = "google",
+  buildNumber = 0
+).dependsOn(commonProtos)
+lazy val cloudDataproc09 = cloudDataproc.scalapb09
+lazy val cloudDataproc10 = cloudDataproc.scalapb10
+lazy val cloudDataproc11 = cloudDataproc.scalapb11
+
 val pgvProto = ProtosProject(
   "build.buf.protoc-gen-validate" % "pgv-java-stub" % "0.6.13",
   grpc = false,

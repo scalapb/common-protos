@@ -10,7 +10,7 @@ publish / skip := true
 
 def commonProtos =
   ProtosProject(
-    "com.google.api.grpc" % "proto-google-common-protos" % "2.9.6",
+    "com.google.api.grpc" % "proto-google-common-protos" % "2.22.0",
     grpc = true,
     protoPackage = "google",
     buildNumber = 0

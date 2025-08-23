@@ -1,8 +1,3 @@
-sonatypeProfileName := "com.thesamet"
-
-// Where is the source code hosted: GitHub or GitLab?
-import xerial.sbt.Sonatype._
-
 inThisBuild(
   List(
     organization := "com.thesamet.scalapb.common-protos",
@@ -17,9 +12,6 @@ inThisBuild(
     licenses := Seq(
       "APL2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")
     ),
-    homepage := Some(url("https://github.com/scalapb/common-protos")),
-    sonatypeProjectHosting := Some(
-      GitHubHosting("scalapb", "common-protos", "thesamet@gmail.com")
-    )
+    homepage := Some(url("https://github.com/scalapb/common-protos"))
   )
 )

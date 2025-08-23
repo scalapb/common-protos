@@ -2,7 +2,6 @@ import sbt._
 import Keys._
 import sbtprotoc.ProtocPlugin.autoImport.PB
 import scala.sys.process.{ProcessLogger, Process}
-import xerial.sbt.Sonatype.autoImport.sonatypeBundleDirectory
 
 object NoProcessLogger extends ProcessLogger {
   def info(s: => String) = ()
@@ -40,9 +39,9 @@ final case class ProtosProject(
           else s"${module.revision}-${buildNumber}"
         },
         crossScalaVersions := (scalapbMajorMinor match {
-          case "0.9"  => List(Scala213, Scala212, Scala211)
           case "0.10" => List(Scala213, Scala212)
           case "0.11" => List(Scala3, Scala213, Scala212)
+          case "1.0"  => List(Scala3, Scala213, Scala212)
         }),
         versionTag := s"${basePackageName}/${module.revision}-${buildNumber}",
         libraryDependencies ++= (if (grpc)
@@ -69,7 +68,6 @@ final case class ProtosProject(
         createTags := createTagsImpl.value,
         publish / skip := (sys.env
           .getOrElse("PUBLISH_ONLY", basePackageName) != basePackageName),
-        sonatypeBundleDirectory := (ThisBuild / baseDirectory).value / "target" / "sonatype-staging",
         Compile / resourceGenerators += Def.task {
 
           val packageOptionsFile =
@@ -104,19 +102,19 @@ final case class ProtosProject(
       )
   }
 
-  def scalapb09: Project =
-    protoProject("0.9.8").dependsOn(
-      dependencies.map(d => ClasspathDependency(d.scalapb09, None)): _*
-    )
-
   val scalapb10: Project =
     protoProject("0.10.11").dependsOn(
       dependencies.map(d => ClasspathDependency(d.scalapb10, None)): _*
     )
 
   val scalapb11: Project =
-    protoProject("0.11.5").dependsOn(
+    protoProject("0.11.20").dependsOn(
       dependencies.map(d => ClasspathDependency(d.scalapb11, None)): _*
+    )
+
+  val scalapb1: Project =
+    protoProject("1.0.0-alpha.2").dependsOn(
+      dependencies.map(d => ClasspathDependency(d.scalapb1, None)): _*
     )
 
   def dependsOn(other: ProtosProject) =

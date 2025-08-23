@@ -26,7 +26,7 @@ lazy val cloudPubSub11 = cloudPubSub.scalapb11
 lazy val cloudPubSub1 = cloudPubSub.scalapb1
 
 val pgvProto = ProtosProject(
-  "build.buf.protoc-gen-validate" % "pgv-java-stub" % "0.6.13",
+  "build.buf.protoc-gen-validate" % "pgv-java-stub" % "0.10.1",
   grpc = false,
   protoPackage = "validate",
   packageName = Some("pgv-proto"),

@@ -13,7 +13,7 @@ Each library is built for Scala **2.12.21**, **2.13.18**, and **3.3.8**, with se
 | Google Cloud Dataproc | `proto-google-cloud-dataproc-v1` | `4.96.0-0` |
 | protoc-gen-validate | `pgv-proto` | `1.3.3-1` |
 
-Check [Maven Central](https://repo.maven.apache.org/maven2/com/thesamet/scalapb/common-protos/) for released versions. Master snapshots replace the `-0` suffix with `-SNAPSHOT`.
+Check [Maven Central](https://repo.maven.apache.org/maven2/com/thesamet/scalapb/common-protos/) for released versions. Master snapshots replace the build-number suffix (such as `-0` or `-1`) with `-SNAPSHOT`.
 
 ScalaPB 0.10 artifacts remain available at their existing published versions. That line is frozen: current Google schemas use proto3 optional fields, which its generator cannot handle. Scala 3 consumers need 3.3.8 or later for the current artifacts.
 
@@ -50,6 +50,7 @@ The root `.jvmopts` allows a 4 GB heap for generated API documentation and exits
 ```sh
 sbt scalafmtSbtCheck
 python3 -m unittest discover -s scripts -p 'test_*.py'
+python3 scripts/check_release_build.py
 bash scripts/test.sh 2.12.21
 bash scripts/test.sh 2.13.18
 bash scripts/test.sh 3.3.8

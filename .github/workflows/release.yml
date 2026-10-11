@@ -40,6 +40,7 @@ jobs:
         run: |
           sbt scalafmtSbtCheck
           python3 -m unittest discover -s scripts -p 'test_*.py'
+          python3 scripts/check_release_build.py
       - name: Compile, inspect artifacts, and test independent consumers
         env:
           SCALA_VERSION: ${{ matrix.scala }}

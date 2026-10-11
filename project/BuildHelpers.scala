@@ -72,6 +72,10 @@ final case class ProtosProject(
           )
           require(!isSnapshot, "RELEASE=1 is required for a release")
           require(
+            !(LocalRootProject / version).value.endsWith("-SNAPSHOT"),
+            "sonaRelease requires a non-SNAPSHOT aggregate version"
+          )
+          require(
             !Keys.isSnapshot.value,
             "sbt must route this version to release staging"
           )

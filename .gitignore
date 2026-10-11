@@ -4,3 +4,6 @@ target
 .metals
 metals.sbt
 .bsp
+.direnv/
+.envrc
+__pycache__/

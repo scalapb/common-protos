@@ -1,0 +1,14 @@
+syntax = "proto3";
+package smoke;
+
+import "google/type/date.proto";
+import "google/pubsub/v1/pubsub.proto";
+import "google/cloud/dataproc/v1/clusters.proto";
+import "validate/validate.proto";
+
+message Envelope {
+  google.type.Date date = 1;
+  google.pubsub.v1.Topic topic = 2;
+  google.cloud.dataproc.v1.Cluster cluster = 3;
+  string label = 4 [(validate.rules).string.min_len = 1];
+}

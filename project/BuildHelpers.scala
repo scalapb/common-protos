@@ -2,6 +2,7 @@ import sbt._
 import Keys._
 import sbtprotoc.ProtocPlugin.autoImport.PB
 import scala.sys.process.{ProcessLogger, Process}
+import scala.collection.JavaConverters._
 
 object NoProcessLogger extends ProcessLogger {
   def info(s: => String) = ()
@@ -38,11 +39,8 @@ final case class ProtosProject(
           if (isSnapshot) s"${module.revision}-SNAPSHOT"
           else s"${module.revision}-${buildNumber}"
         },
-        crossScalaVersions := (scalapbMajorMinor match {
-          case "0.10" => List(Scala213, Scala212)
-          case "0.11" => List(Scala3, Scala213, Scala212)
-          case "1.0"  => List(Scala3, Scala213, Scala212)
-        }),
+        crossScalaVersions := List(Scala212, Scala213, Scala3),
+        Compile / PB.protocVersion := "3.25.8",
         versionTag := s"${basePackageName}/${module.revision}-${buildNumber}",
         libraryDependencies ++= (if (grpc)
                                    Seq(
@@ -66,6 +64,36 @@ final case class ProtosProject(
           ) -> (Compile / sourceManaged).value / "protobuf"
         ),
         createTags := createTagsImpl.value,
+        validateRelease := {
+          val tag = sys.env.getOrElse("RELEASE_TAG", "")
+          require(
+            tag == versionTag.value,
+            s"Release tag '$tag' must match '${versionTag.value}'"
+          )
+          require(!isSnapshot, "RELEASE=1 is required for a release")
+          require(
+            !Keys.isSnapshot.value,
+            "sbt must route this version to release staging"
+          )
+          require(
+            sys.env.get("PUBLISH_ONLY").contains(basePackageName),
+            "PUBLISH_ONLY must select this library"
+          )
+        },
+        verifyArtifacts := {
+          val jar = new java.util.jar.JarFile((Compile / packageBin).value)
+          try {
+            require(
+              jar.getManifest.getMainAttributes
+                .getValue("ScalaPB-Options-Proto") == optionsFile
+            )
+            require(jar.getEntry(optionsFile) != null, s"Missing $optionsFile")
+            require(
+              jar.entries().asScala.exists(_.getName.endsWith(".class")),
+              "Missing generated classes"
+            )
+          } finally jar.close()
+        },
         publish / skip := (sys.env
           .getOrElse("PUBLISH_ONLY", basePackageName) != basePackageName),
         Compile / resourceGenerators += Def.task {
@@ -87,9 +115,7 @@ final case class ProtosProject(
                 |  scope: PACKAGE
                 |  flat_package: false
                 |  lenses: true
-                |  // java_conversions as a file-level option is only introduced in 0.10.11
-                |  // so it is not yet included here for backwards-compatiblity.
-                |  // java_conversions: true
+                |  java_conversions: true
                 |  preserve_unknown_fields: true
                 |};
             """.stripMargin
@@ -102,18 +128,13 @@ final case class ProtosProject(
       )
   }
 
-  val scalapb10: Project =
-    protoProject("0.10.11").dependsOn(
-      dependencies.map(d => ClasspathDependency(d.scalapb10, None)): _*
-    )
-
   val scalapb11: Project =
-    protoProject("0.11.20").dependsOn(
+    protoProject(ScalaPB11).dependsOn(
       dependencies.map(d => ClasspathDependency(d.scalapb11, None)): _*
     )
 
   val scalapb1: Project =
-    protoProject("1.0.0-alpha.2").dependsOn(
+    protoProject(ScalaPB1).dependsOn(
       dependencies.map(d => ClasspathDependency(d.scalapb1, None)): _*
     )
 
@@ -122,17 +143,24 @@ final case class ProtosProject(
 }
 
 object ProtosProject {
-  val Scala211 = "2.11.12"
-  val Scala212 = "2.12.15"
-  val Scala213 = "2.13.8"
-  val Scala3 = "3.1.0"
+  val ScalaPB11 = "0.11.21"
+  val ScalaPB1 = "1.0.0-alpha.6"
+  val Scala212 = "2.12.21"
+  val Scala213 = "2.13.18"
+  val Scala3 = "3.3.8"
 
   val versionTag = settingKey[String]("Version tag to use in git")
 
   val createTags = taskKey[Unit]("Creates git tags for all current builds")
+  val validateRelease = taskKey[Unit](
+    "Checks that the release tag and selected library match this build"
+  )
+  val verifyArtifacts = taskKey[Unit](
+    "Checks generated classes and ScalaPB options in the packaged jar"
+  )
 
   def isDirty(): Boolean = {
-    false // Process(Seq("git", "status", "-s")).!!.nonEmpty
+    Process(Seq("git", "status", "--porcelain")).!!.nonEmpty
   }
 
   val isSnapshot: Boolean = sys.env.getOrElse("RELEASE", "").isEmpty()
@@ -147,8 +175,18 @@ object ProtosProject {
       .!(NoProcessLogger)) == 0
     if (!tagExists) {
       log(s"Creating tag $tag")
-      Process(Seq("git", "tag", "-a", tag, "-m", tag)).!
+      require(
+        Process(Seq("git", "tag", "-a", tag, "-m", tag)).! == 0,
+        s"Could not create $tag"
+      )
     } else {
+      val taggedCommit =
+        Process(Seq("git", "rev-parse", s"refs/tags/$tag^{commit}")).!!.trim
+      val head = Process(Seq("git", "rev-parse", "HEAD")).!!.trim
+      require(
+        taggedCommit == head,
+        s"Tag $tag already points to another commit"
+      )
       log(s"Tag $tag exists. Skipping")
     }
   }

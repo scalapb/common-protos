@@ -45,6 +45,7 @@ See the [ScalaPB common-protos guide](https://scalapb.github.io/docs/common-prot
 ## Development and checks
 
 Use JDK 17 and sbt (or `nix-shell`). The sbt launcher uses `project/build.properties`.
+The root `.jvmopts` allows a 4 GB heap for generated API documentation and exits immediately on memory exhaustion.
 
 ```sh
 sbt scalafmtSbtCheck

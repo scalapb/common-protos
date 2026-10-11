@@ -8,12 +8,12 @@ Each library is built for Scala **2.12.21**, **2.13.18**, and **3.3.8**, with se
 
 | Library | Artifact prefix | Version built on master |
 | --- | --- | --- |
-| Google common protos | `proto-google-common-protos` | `2.78.0-0` |
+| Google common protos | `proto-google-common-protos` | `2.78.0-1` |
 | Google Cloud Pub/Sub | `proto-google-cloud-pubsub-v1` | `1.157.0-0` |
 | Google Cloud Dataproc | `proto-google-cloud-dataproc-v1` | `4.96.0-0` |
-| protoc-gen-validate | `pgv-proto` | `1.3.3-0` |
+| protoc-gen-validate | `pgv-proto` | `1.3.3-1` |
 
-Check [Maven Central](https://repo.maven.apache.org/maven2/com/thesamet/scalapb/common-protos/) for released versions. Master snapshots replace the `-0` suffix with `-SNAPSHOT`.
+Check [Maven Central](https://repo.maven.apache.org/maven2/com/thesamet/scalapb/common-protos/) for released versions. Master snapshots replace the build-number suffix (such as `-0` or `-1`) with `-SNAPSHOT`.
 
 ScalaPB 0.10 artifacts remain available at their existing published versions. That line is frozen: current Google schemas use proto3 optional fields, which its generator cannot handle. Scala 3 consumers need 3.3.8 or later for the current artifacts.
 
@@ -25,14 +25,14 @@ Match the artifact's ScalaPB line to your generator and runtime. For example:
 
 ```scala
 libraryDependencies ++= Seq(
-  "com.thesamet.scalapb.common-protos" %% "proto-google-common-protos-scalapb_0.11" % "2.78.0-0",
-  "com.thesamet.scalapb.common-protos" %% "proto-google-common-protos-scalapb_0.11" % "2.78.0-0" % "protobuf"
+  "com.thesamet.scalapb.common-protos" %% "proto-google-common-protos-scalapb_0.11" % "2.78.0-1",
+  "com.thesamet.scalapb.common-protos" %% "proto-google-common-protos-scalapb_0.11" % "2.78.0-1" % "protobuf"
 )
 ```
 
 The normal dependency provides compiled classes. The `protobuf` dependency provides imports and generator options when your own `.proto` files import these libraries. Omit it if you do not generate protos. Pub/Sub and Dataproc depend on the matching common-protos artifact.
 
-Current Google artifacts bring in protobuf-java 4.33.6. Although ScalaPB 0.11 itself declares protobuf-java 3.25.8, this project's consumer matrix tests the resolved protobuf-java 4 runtime. Do not force protobuf-java 3 onto these Google Java classes. The ScalaPB 1.0 line resolves protobuf-java 4.35.0. Serialization and Java conversions are tested for both lines.
+Current Google artifacts bring in protobuf-java 4.33.6. Although ScalaPB 0.11 itself declares protobuf-java 3.25.8, this project's consumer matrix tests the resolved protobuf-java 4 runtime. These Google packages require protobuf-java 4.x. No additional configuration is normally needed: sbt selects it transitively. If your build overrides protobuf-java to 3.x, remove that override before upgrading. The ScalaPB 1.0 line resolves protobuf-java 4.35.0. Serialization and Java conversions are tested for both lines.
 
 For snapshots, use sbt 1.11 or later:
 
@@ -50,6 +50,7 @@ The root `.jvmopts` allows a 4 GB heap for generated API documentation and exits
 ```sh
 sbt scalafmtSbtCheck
 python3 -m unittest discover -s scripts -p 'test_*.py'
+python3 scripts/check_release_build.py
 bash scripts/test.sh 2.12.21
 bash scripts/test.sh 2.13.18
 bash scripts/test.sh 3.3.8
@@ -69,7 +70,7 @@ Artifact versions have the form `<upstream-version>-<build-number>`. Increase `b
 
    ```sh
    sbt 'proto-google-common-protos0_11/createTags'
-   git push origin proto-google-common-protos/2.78.0-0
+   git push origin proto-google-common-protos/2.78.0-1
    ```
 
 4. Wait for its workflow to finish and all six common-protos POMs to appear on Maven Central. Then create and push one remaining library tag at a time:
@@ -80,7 +81,7 @@ Artifact versions have the form `<upstream-version>-<build-number>`. Increase `b
    sbt 'proto-google-cloud-dataproc-v10_11/createTags'
    git push origin proto-google-cloud-dataproc-v1/4.96.0-0
    sbt 'pgv-java-stub0_11/createTags'
-   git push origin pgv-proto/1.3.3-0
+   git push origin pgv-proto/1.3.3-1
    ```
 
 A single library tag publishes both ScalaPB lines for all three Scala versions. `scripts/release.py` rejects unknown or mismatched tags, sets `PUBLISH_ONLY`, and verifies that common-protos is available before releasing Pub/Sub or Dataproc. Publishing is serialized; wait for each run before pushing the next tag. The plugin imports the signing key itself.

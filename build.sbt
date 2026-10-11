@@ -3,6 +3,10 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 ThisBuild / scalaVersion := ProtosProject.Scala213
 // Releases use library/version tags, rather than sbt-dynver's default v prefix.
 ThisBuild / isSnapshot := ProtosProject.isSnapshot
+// sonaRelease inspects the aggregate project's version string, not isSnapshot.
+// The aggregate is never published; each library defines its own Maven version.
+ThisBuild / version := (if (ProtosProject.isSnapshot) "0.0.0-SNAPSHOT"
+                        else "0.0.0")
 ThisBuild / crossScalaVersions := List(
   ProtosProject.Scala212,
   ProtosProject.Scala213,
@@ -17,7 +21,7 @@ def commonProtos =
     "com.google.api.grpc" % "proto-google-common-protos" % "2.78.0",
     grpc = true,
     protoPackage = "google",
-    buildNumber = 0
+    buildNumber = 1
   )
 lazy val commonProtos11 = commonProtos.scalapb11
 lazy val commonProtos1 = commonProtos.scalapb1
@@ -45,7 +49,7 @@ val pgvProto = ProtosProject(
   grpc = false,
   protoPackage = "validate",
   packageName = Some("pgv-proto"),
-  buildNumber = 0
+  buildNumber = 1
 )
 lazy val pgvProto11 = pgvProto.scalapb11
 lazy val pgvProto1 = pgvProto.scalapb1
